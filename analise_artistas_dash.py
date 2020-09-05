@@ -33,7 +33,7 @@ def padroniza_variavel(dados,var):
     var_pad=(dados[var]-media)/dp
     var_pad[var_pad.isna()]=0
     nome_novo="std_"+var
-    dados[nome_novo]=var_pad
+    dados[nome_novo]=var_pad.round(2)
     return("feito")
 
 
@@ -45,6 +45,8 @@ PAGE_SIZE = 15
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server=app.server
+
 
 df = pd.read_csv("dados_musicas.csv")
 
@@ -141,11 +143,12 @@ app.layout = html.Div([
         html.Div([
             html.H6("Distribuição atributos entre artistas" ),
             dcc.Graph(id='a10')
-            ],style={'width': '30%', 'display': 'inline-block','textAlign': 'center'}),
+            ],style={'width': '50%', 'display': 'inline-block','textAlign': 'center'}),
         html.Div([
             html.H6("Importância das variáveis na modelagem"),
             dcc.Graph(id='a11')
-            ],style={'width': '30%', 'display': 'inline-block','textAlign': 'center'}),
+            ],style={'width': '50%', 'display': 'inline-block','textAlign': 'center'})]),
+        html.Div([
         html.Div([
             html.H6("Diagnóstico por música"),
      
@@ -164,7 +167,7 @@ app.layout = html.Div([
         sort_action="native",
         sort_mode="multi"
             )
-            ],style={'width': '30%', 'display': 'inline-block','textAlign': 'center'})
+            ],style={'width': '100%', 'display': 'inline-block','textAlign': 'center'})
         ])
 
     
@@ -608,12 +611,12 @@ def update_table(artista1, artista2):
     escolha=max([rf_auc,gboost_auc])
     if escolha==rf_auc:
         y_pred=rf.fit(X_train,y_train).predict(X)
-        y_prob=rf.fit(X_train,y_train).predict_proba(X)
+        y_prob=rf.fit(X_train,y_train).predict_proba(X).round(2)
         
         
     elif escolha==gboost_auc:
         y_pred=gboost.fit(X_train,y_train).predict(X)
-        y_prob=gboost.fit(X_train,y_train).predict_proba(X)
+        y_prob=gboost.fit(X_train,y_train).predict_proba(X).round(2)
     #Tabela
 
     
